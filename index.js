@@ -29,9 +29,14 @@ async function run() {
 
     app.post("/destinations", async (req, res) => {
       const destinationData = req.body;
-      console.log(destinationData);
       const result = await destinationCollection.insertOne(destinationData);
 
+      res.send(result);
+    })
+
+    app.get("/destinations", async (req, res) => {
+      const result = await destinationCollection.find().toArray();
+      
       res.send(result);
     })
     
