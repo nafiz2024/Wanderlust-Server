@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 dotenv.config();
 
 const uri = process.env.MONGODB_URI;
@@ -27,17 +27,24 @@ async function run() {
     const db = client.db("wanderlust")
     const destinationCollection = db.collection("destinations");
 
-    app.post("/destinations", async (req, res) => {
+    app.post("/destination", async (req, res) => {
       const destinationData = req.body;
       const result = await destinationCollection.insertOne(destinationData);
 
       res.send(result);
     })
 
-    app.get("/destinations", async (req, res) => {
+    app.get("/destination", async (req, res) => {
       const result = await destinationCollection.find().toArray();
       
-      res.send(result);
+      res.json(result);
+    })
+
+    app.get("/destination/:id", async (req, res) => {
+      const { id } = req.params;
+      const result = await destinationCollection.findOne({ _id: new ObjectId(id) });
+
+      res.json(result);
     })
     
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
