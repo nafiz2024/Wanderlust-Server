@@ -47,6 +47,18 @@ async function run() {
       res.json(result);
     })
     
+    app.patch("/destination/:id", async (req, res) => {
+      const { id } = req.params;
+      const updateData = req.body;
+
+      const result = await destinationCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: updateData}
+      )
+
+      res.json(result);
+    })
+    
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
