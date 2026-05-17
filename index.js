@@ -26,6 +26,7 @@ async function run() {
 
     const db = client.db("wanderlust")
     const destinationCollection = db.collection("destinations");
+    const bookingCollection = db.collection("bookings")
 
     app.post("/destination", async (req, res) => {
       const destinationData = req.body;
@@ -62,6 +63,13 @@ async function run() {
     app.delete("/destination/:id", async (req, res) => {
       const { id } = req.params;
       const result = await destinationCollection.deleteOne({ _id: new ObjectId(id) });
+
+      res.json(result);
+    })
+
+    app.post("/booking", async (req, res) => {
+      const bookingData = req.body;
+      const result = await bookingCollection.insertOne(bookingData);
 
       res.json(result);
     })
